@@ -1,19 +1,20 @@
 import React from "react";
-import {renderToReadableStream} from "react-dom/server";
+import {FilterValuesType} from "./App";
 
 type TodolistPropsType = {
     title?: string
     tasks: TasksType[]
-    removeTask?: any
+    removeTask?: (id: number) => void
+    changeFilter: (value: FilterValuesType) => void
 }
-type TasksType = {
+export type TasksType = {
     id: number
     title: string
     isDone: boolean
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-    const {title, removeTask} = props;
+    const {title, removeTask, changeFilter} = props;
 
     const handler = (id: number) => {
         if (removeTask) {
@@ -41,9 +42,9 @@ export const Todolist = (props: TodolistPropsType) => {
                 })}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => changeFilter('all')}>All</button>
+                <button onClick={() => changeFilter('active')}>Active</button>
+                <button onClick={() => changeFilter('completed')}>Completed</button>
             </div>
         </div>
     )
