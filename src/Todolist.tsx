@@ -1,8 +1,10 @@
 import React from "react";
+import {renderToReadableStream} from "react-dom/server";
 
 type TodolistPropsType = {
     title?: string
     tasks: TasksType[]
+    removeTask?: any
 }
 type TasksType = {
     id: number
@@ -11,9 +13,15 @@ type TasksType = {
 }
 
 export const Todolist = (props: TodolistPropsType) => {
-    const {title} = props;
+    const {title, removeTask} = props;
 
-
+    const handler = (id: number) => {
+        if (removeTask) {
+            return removeTask(id)
+        } else {
+            return null
+        }
+    }
     return (
         <div>
             <h3>{title}</h3>
@@ -22,11 +30,13 @@ export const Todolist = (props: TodolistPropsType) => {
                 <button>+</button>
             </div>
             <ul>
-                {props.tasks.map((task: TasksType, i: number) => {
-                    const {id, title, isDone} = task
-
+                {props.tasks.map((t: TasksType,) => {
+                    const {id, title, isDone} = t
                     return (
-                        <li key={i}><input type="checkbox" defaultChecked={isDone}/> <span>{title}</span></li>
+                        <li key={id}><input type="checkbox" defaultChecked={isDone}/> <span>{title}</span>
+                            <button onClick={() => handler(id)}>----
+                            </button>
+                        </li>
                     )
                 })}
             </ul>
