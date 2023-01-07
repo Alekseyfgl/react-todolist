@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {MouseEvent} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
+import {Button} from "./components/Button";
 
 
 type  TasksType = {
@@ -31,12 +32,22 @@ function App() {
         console.log(result)
     }
 
+    const btn1Foo = (user: string,age: number) => {
+        console.log(user, age)
+    };
+    const btn2Foo = (user: string, age: number) => {
+        console.log(user, age)
+    };
+
     return (
         <div className="App">
-            <Todolist title={title}
-                      tasks={tasks1}/>
-            <Todolist tasks={tasks2}
-                      removeTask={removeTask}/>
+            {/*<Todolist title={title}*/}
+            {/*          tasks={tasks1}/>*/}
+            {/*<Todolist tasks={tasks2}*/}
+            {/*          removeTask={removeTask}/>*/}
+
+            <Button name={'btn-1'} callBack={()=>btn1Foo('Alex',21)}/>
+            <Button name={'btn-2'} callBack={()=>btn2Foo('Vasya',22)}/>
         </div>
     );
 }
