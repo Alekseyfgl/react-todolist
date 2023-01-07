@@ -32,11 +32,14 @@ function App() {
         console.log(result)
     }
 
-    const btn1Foo = (user: string,age: number) => {
+    const btn1Foo = (user: string, age: number) => {
         console.log(user, age)
     };
     const btn2Foo = (user: string, age: number) => {
         console.log(user, age)
+    };
+    const btn3Foo = () => {
+        console.log('without params')
     };
 
     return (
@@ -46,8 +49,9 @@ function App() {
             {/*<Todolist tasks={tasks2}*/}
             {/*          removeTask={removeTask}/>*/}
 
-            <Button name={'btn-1'} callBack={()=>btn1Foo('Alex',21)}/>
-            <Button name={'btn-2'} callBack={()=>btn2Foo('Vasya',22)}/>
+            <Button name={'btn-1'} callBack={() => btn1Foo('Alex', 21)}/>
+            <Button name={'btn-2'} callBack={() => btn2Foo('Vasya', 22)}/>
+            <Button name={'stupid button'} callBack={btn3Foo}/>
         </div>
     );
 }
