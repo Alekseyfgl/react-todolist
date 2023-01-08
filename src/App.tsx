@@ -1,4 +1,4 @@
-import React, {MouseEvent} from 'react';
+import React, {MouseEvent, useState} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
 import {Button} from "./components/Button";
@@ -42,16 +42,25 @@ function App() {
         console.log('without params')
     };
 
+    //обычно в useState не кладут большие массивы с объектами, т.к. это локальное состояние компоненты
+    let [a, setA] = useState(1)
+
+    const onClickHandle = () => {
+        ++a;
+        setA(a)
+    }
+
+    const onClickReset = () => {
+        ++a;
+        setA(a)
+    }
+
     return (
         <div className="App">
-            {/*<Todolist title={title}*/}
-            {/*          tasks={tasks1}/>*/}
-            {/*<Todolist tasks={tasks2}*/}
-            {/*          removeTask={removeTask}/>*/}
 
-            <Button name={'btn-1'} callBack={() => btn1Foo('Alex', 21)}/>
-            <Button name={'btn-2'} callBack={() => btn2Foo('Vasya', 22)}/>
-            <Button name={'stupid button'} callBack={btn3Foo}/>
+            <h1>{a}</h1>
+            <button onClick={onClickHandle}>--number--</button>
+            <button onClick={onClickReset}>--reset count--</button>
         </div>
     );
 }
