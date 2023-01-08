@@ -7,9 +7,6 @@ import {Button} from "./components/Button";
 
 
 function App() {
-
-
-
     const btn1Foo = (user: string, age: number) => {
         console.log(user, age)
     };
