@@ -1,43 +1,48 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import {Todolist} from "./Todolist";
+import {NewComponent} from "./components/NewComponent";
 
+export type Banknotes = 'Dollars' | 'RUBLS' | 'all';
 
-type  TasksType = {
-    id: number
-    title: string
-    isDone: boolean
+export type MoneyState = {
+    banknots: Banknotes;
+    value: number;
+    number: string;
 }
 
 function App() {
-    const tasks1 = [
-        {id: 1, title: "HTML&CSS", isDone: true},
-        {id: 2, title: "JS", isDone: true},
-        {id: 3, title: "ReactJS", isDone: false}
-    ]
-    const tasks2 = [
-        {id: 1, title: "Hello world", isDone: true},
-        {id: 2, title: "I am Happy", isDone: false},
-        {id: 3, title: "Yo", isDone: false},
-        {id: 4, title: "Yo", isDone: false}
-    ]
+    const [money, setMoney] = useState<MoneyState[]>([
+        {banknots: 'Dollars', value: 100, number: ' a1234567890'},
+        {banknots: 'Dollars', value: 50, number: ' z1234567890'},
+        {banknots: 'RUBLS', value: 100, number: ' w1234567890'},
+        {banknots: 'Dollars', value: 100, number: ' e1234567890'},
+        {banknots: 'Dollars', value: 50, number: ' c1234567890'},
+        {banknots: 'RUBLS', value: 100, number: ' r1234567890'},
+        {banknots: 'Dollars', value: 50, number: ' x1234567890'},
+        {banknots: 'RUBLS', value: 50, number: ' v1234567890'},
+    ])
 
+    const [filter, setFilter] = useState<Banknotes>('all')
 
-    const title: string = 'First Todolist'
+    let currentMoney = money
 
-    function removeTask(id: number) {
+    if (filter === 'Dollars') {
+        currentMoney = money.filter(m => m.banknots === 'Dollars')
+    }
+    if (filter === 'RUBLS') {
+        currentMoney = money.filter(m => m.banknots === 'RUBLS')
+    }
 
-        let result = tasks2.filter((t: TasksType) => id !== t.id)
-        console.log(result)
+    const onClickFilterHandler = (banknote: Banknotes) => {
+        setFilter(banknote)
     }
 
     return (
-        <div className="App">
-            <Todolist title={title}
-                      tasks={tasks1}/>
-            <Todolist tasks={tasks2}
-                      removeTask={removeTask}/>
-        </div>
+        <NewComponent currentMoney={currentMoney}
+                      filter={filter}
+                      onClickFilterHandler={onClickFilterHandler}
+        />
     );
 }
 
