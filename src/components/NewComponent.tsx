@@ -22,6 +22,8 @@ export const NewComponent = (props: NewComponentProps) => {
                     )
                 })}
             </ul>
+
+
             <h1>{props.filter}</h1>
             <button onClick={() => props.onClickFilterHandler('all')}>all</button>
             <button onClick={() => props.onClickFilterHandler('RUBLS')}>ruble</button>
