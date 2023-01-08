@@ -4,13 +4,10 @@ import {Todolist} from "./Todolist";
 import {Button} from "./components/Button";
 
 
-type  TasksType = {
-    id: number
-    title: string
-    isDone: boolean
-}
+
 
 function App() {
+
 
 
     const btn1Foo = (user: string, age: number) => {
