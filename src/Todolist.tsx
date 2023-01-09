@@ -1,46 +1,48 @@
-import React from "react";
+import React, { FC } from 'react';
+import { FilterValuesTypes } from './App';
 
 type TodolistPropsType = {
-    title?: string
-    tasks: TasksType[]
-    removeTask?: Function
-}
+    title?: string;
+    tasks: TasksType[];
+    removeTask: (taskId: number) => void;
+    changeFilter: (filter: FilterValuesTypes) => void;
+};
 type TasksType = {
-    id: number
-    title: string
-    isDone: boolean
-}
+    id: number;
+    title: string;
+    isDone: boolean;
+};
 
-export const Todolist = (props: TodolistPropsType) => {
-    const {title, removeTask} = props;
-
-
+export const Todolist: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     return (
         <div>
-            <h3>{title}</h3>
+            <h3>{props.title}</h3>
             <div>
-                <input/>
+                <input />
                 <button>+</button>
             </div>
             <ul>
-                {props.tasks.map((task: TasksType, i: number) => {
-                    const {id, title, isDone} = task
-
-                    return (
-                        <li key={task.id}><input type="checkbox" defaultChecked={isDone}/>
-                            <span>{title}</span>
-                            <button onClick={()=> {
-                               removeTask!(id)}}>---</button>
-                        </li>
-
-                    )
-                })}
+                {props.tasks.length !== 0 ? (
+                    props.tasks.map((task: TasksType) => {
+                        // если функц что-то принимает в себя, то скобки в сдвух сторон
+                        const removeTasks = () => props.removeTask(task.id); //для каждой  <button onClick={removeTasks}> -</button>нужно создать функцию
+                        return (
+                            <li key={task.id}>
+                                <input type="checkbox" defaultChecked={task.isDone} />
+                                <span>{task.title}</span>
+                                <button onClick={removeTasks}> -</button>
+                            </li>
+                        );
+                    })
+                ) : (
+                    <span>Тасок нет:(</span>
+                )}
             </ul>
             <div>
-                <button>All</button>
-                <button>Active</button>
-                <button>Completed</button>
+                <button onClick={() => props.changeFilter('all')}>All</button>
+                <button onClick={() => props.changeFilter('active')}>Active</button>
+                <button onClick={() => props.changeFilter('completed')}>Completed</button>
             </div>
         </div>
-    )
-}
+    );
+};
