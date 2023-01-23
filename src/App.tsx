@@ -11,17 +11,6 @@ export type TasksType = {
 export type FilterValuesTypes = 'all' | 'active' | 'completed';
 
 function App(): JSX.Element {
-    // const tasks1:TasksType[] = [
-    //     {id: 1, title: "HTML&CSS", isDone: true},
-    //     {id: 2, title: "JS", isDone: true},
-    //     {id: 3, title: "ReactJS", isDone: false}
-    // ]
-    // let tasks2: TasksType[] = [
-    //     {id: 1, title: "Hello world", isDone: true},
-    //     {id: 2, title: "I am Happy", isDone: false},
-    //     {id: 3, title: "Yo", isDone: false},
-    //     {id: 4, title: "Yo", isDone: false}
-    // ]
     const title: string = 'Todolist';
     const [tasks, setTasks] = useState<TasksType[]>([
         { id: '1', title: 'Hello world', isDone: true },
@@ -36,9 +25,9 @@ function App(): JSX.Element {
 
         switch (filterValue) {
             case 'active':
-                return (filteredTasks = tasks.filter((t) => !t.isDone));
+                return (filteredTasks = tasks.filter((t: TasksType) => !t.isDone));
             case 'completed':
-                return (filteredTasks = tasks.filter((t) => t.isDone));
+                return (filteredTasks = tasks.filter((t: TasksType) => t.isDone));
             default:
                 return tasks;
         }
@@ -56,12 +45,22 @@ function App(): JSX.Element {
     //     console.log(tasks);
     // }, [tasks, filter]);
     const addTask = (title: string) => {
-        const newTask: TasksType = {
-            id: v1(),
-            title: title,
-            isDone: false,
-        };
-        setTasks([...tasks, newTask]);
+        if (title.trim() !== '') {
+            const newTask: TasksType = {
+                id: v1(),
+                title: title,
+                isDone: false,
+            };
+            setTasks([...tasks, newTask]);
+        }
+    };
+
+    const changeTaskStatus = (taskId: string, isDone: boolean) => {
+        //данную задачу можно решить через find и де структуризацию,
+        // но чтобы заставить реакт перерендерить мы создадим только новый массив, это так себе решение!!!
+
+        // в данном случае мы создали новый массив и новый объект
+        setTasks(tasks.map((t: TasksType) => (t.id === taskId ? { ...t, isDone: isDone } : t)));
     };
 
     const filteredTasksForRender: TasksType[] = getFilteredTasksForRender(tasks, filter);
@@ -69,7 +68,7 @@ function App(): JSX.Element {
         <div className="App">
             {/*<Todolist title={title} tasks={filteredTasksForRender} removeTask={removeTask} changeFilter={changeFilter} />*/}
 
-            <Todolist tasks={filteredTasksForRender} removeTask={removeTask} addTask={addTask} changeFilter={changeFilter} />
+            <Todolist tasks={filteredTasksForRender} removeTask={removeTask} addTask={addTask} changeFilter={changeFilter} changeTaskStatus={changeTaskStatus} filter={filter} />
         </div>
     );
 }
