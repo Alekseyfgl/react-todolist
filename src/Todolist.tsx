@@ -1,16 +1,16 @@
 import React, { ChangeEvent, FC, useState, KeyboardEvent } from 'react';
 import { FilterValuesTypes, TasksType } from './App';
-import { Simulate } from 'react-dom/test-utils';
-import error = Simulate.error;
 
 type TodolistPropsType = {
-    title?: string;
+    todoListId: string;
+    title: string;
     tasks: TasksType[];
     filter: FilterValuesTypes;
-    removeTask: (taskId: string) => void;
-    changeFilter: (filter: FilterValuesTypes) => void;
-    addTask: (title: string) => void;
-    changeTaskStatus: (taskId: string, isDone: boolean) => void;
+    removeTask: (taskId: string, todoListId: string) => void;
+    changeTodoListFilter: (filter: FilterValuesTypes, todoListId: string) => void;
+    addTask: (title: string, todoListId: string) => void;
+    changeTaskStatus: (taskId: string, isDone: boolean, todoListId: string) => void;
+    removeTodoList: (todoListId: string) => void;
 };
 
 export const Todolist: FC<TodolistPropsType> = (props: TodolistPropsType) => {
@@ -21,8 +21,8 @@ export const Todolist: FC<TodolistPropsType> = (props: TodolistPropsType) => {
     const tasksList: JSX.Element | JSX.Element[] = taskCounter ? (
         props.tasks.map((task: TasksType) => {
             // если функц что-то принимает в себя, то скобки в сдвух сторон
-            const removeTasks = (): void => props.removeTask(task.id); //для каждой  <button onClick={removeTasks}>
-            const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>): void => props.changeTaskStatus(task.id, e.currentTarget.checked);
+            const removeTasks = (): void => props.removeTask(task.id, props.todoListId); //для каждой  <button onClick={removeTasks}>
+            const changeTaskStatus = (e: ChangeEvent<HTMLInputElement>): void => props.changeTaskStatus(task.id, e.currentTarget.checked, props.todoListId);
             const taskDoneStyle = task.isDone ? 'done' : '';
             return (
                 <li className={taskDoneStyle} key={task.id}>
@@ -46,18 +46,25 @@ export const Todolist: FC<TodolistPropsType> = (props: TodolistPropsType) => {
 
     const onClickAddTaskHandler = () => {
         if (title.trim() !== '') {
-            props.addTask(title);
+            props.addTask(title, props.todoListId);
         } else {
             setError(true);
         }
         setTitle('');
     };
 
-    const handlerCreator = (filter: FilterValuesTypes) => () => props.changeFilter(filter);
+    const onClickRemoveTodoListHandler = () => {
+        props.removeTodoList(props.todoListId);
+    };
+    const handlerCreator = (filter: FilterValuesTypes) => () => props.changeTodoListFilter(filter, props.todoListId);
 
+    const btnAllStyle: string = props.filter === 'all' ? 'btn-active' : '';
+    const btnActiveStyle: string = props.filter === 'active' ? 'btn-active' : '';
+    const btnCompletedStyle: string = props.filter === 'completed' ? 'btn-active' : '';
     return (
         <div>
             <h3>{props.title}</h3>
+            <button onClick={onClickRemoveTodoListHandler}>X</button>
             <div>
                 <input className={error ? 'error-input' : ''} value={title} onChange={onChangeSetTitle} onKeyDown={onKeyDownHandler} />
                 {errorMessage}
@@ -65,13 +72,13 @@ export const Todolist: FC<TodolistPropsType> = (props: TodolistPropsType) => {
             </div>
             <ul>{tasksList}</ul>
             <div>
-                <button className={props.filter === 'all' ? 'btn-active' : ''} onClick={handlerCreator('all')}>
+                <button className={btnAllStyle} onClick={handlerCreator('all')}>
                     All
                 </button>
-                <button className={props.filter === 'active' ? 'btn-active' : ''} onClick={handlerCreator('active')}>
+                <button className={btnActiveStyle} onClick={handlerCreator('active')}>
                     Active
                 </button>
-                <button className={props.filter === 'completed' ? 'btn-active' : ''} onClick={handlerCreator('completed')}>
+                <button className={btnCompletedStyle} onClick={handlerCreator('completed')}>
                     Completed
                 </button>
             </div>
