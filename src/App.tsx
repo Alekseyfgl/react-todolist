@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import { v1 } from 'uuid';
-import { Todolist } from './Todolist';
+import {v1} from 'uuid';
+import {Todolist} from './Todolist';
+import {AddItemForm} from './AddItemForm';
 
 export type TasksType = {
     id: string;
@@ -25,31 +26,52 @@ function App() {
     const todoListId_2 = v1();
 
     const [todoLists, setTodoLists] = useState<TodoListType[]>([
-        { id: todoListId_1, title: 'What to learn?', filter: 'all' },
-        { id: todoListId_2, title: 'SHOP', filter: 'all' },
+        {id: todoListId_1, title: 'What to learn?', filter: 'all'},
+        {id: todoListId_2, title: 'SHOP', filter: 'all'},
     ]);
 
     const [tasks, setTasks] = useState<TasksStateType>({
         [todoListId_1]: [
-            { id: '1', title: 'Hello world', isDone: true },
-            { id: '2', title: 'I am Happy', isDone: false },
-            { id: '3', title: 'Yo', isDone: false },
-            { id: '4', title: 'Yo', isDone: false },
+            {id: '1', title: 'Hello world', isDone: true},
+            {id: '2', title: 'I am Happy', isDone: false},
+            {id: '3', title: 'Yo', isDone: false},
+            {id: '4', title: 'Yo', isDone: false},
         ],
         [todoListId_2]: [
-            { id: '5', title: 'WHISKY', isDone: true },
-            { id: '6', title: 'COLA', isDone: false },
-            { id: '7', title: 'ACE', isDone: false },
+            {id: '5', title: 'WHISKY', isDone: true},
+            {id: '6', title: 'COLA', isDone: false},
+            {id: '7', title: 'ACE', isDone: false},
         ],
     });
 
+    const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
+        // const copyTasks: TasksStateType = {...tasks}
+        // copyTasks[todoListId] = copyTasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))
+        // setTasks(copyTasks);
+        setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))});
+    }
+
+    const addTodoList = (todoTitle: string) => {
+        const newTodoList: TodoListType = {
+            id: v1(),
+            title: todoTitle,
+            filter: 'all',
+        };
+        setTodoLists([...todoLists, newTodoList]);
+        setTasks({...tasks, [newTodoList.id]: []});
+    };
+
     const removeTodoList = (todoListId: string) => {
-        const updatedTodoList = todoLists.filter((tl) => tl.id !== todoListId);
+        const updatedTodoList: TodoListType[] = todoLists.filter((tl) => tl.id !== todoListId);
         setTodoLists(updatedTodoList);
     };
 
     const changeTodoListFilter = (filter: FilterValuesTypes, todoListId: string) => {
-        setTodoLists(todoLists.map((tl: TodoListType) => (tl.id === todoListId ? { ...tl, filter: filter } : tl)));
+        setTodoLists(todoLists.map((tl: TodoListType) => (tl.id === todoListId ? {...tl, filter: filter} : tl)));
+    };
+
+    const changeTodoListTitle = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title} : tl))
     };
 
     const removeTask = (taskId: string, todoListId: string): void => {
@@ -63,7 +85,7 @@ function App() {
          */
 
         //1 вариант
-        setTasks({ ...tasks, [todoListId]: tasks[todoListId].filter((t: TasksType) => taskId !== t.id) });
+        setTasks({...tasks, [todoListId]: tasks[todoListId].filter((t: TasksType) => taskId !== t.id)});
     };
 
     const addTask = (title: string, todoListId: string) => {
@@ -82,7 +104,7 @@ function App() {
             setTasks(copyTasks);
             */
             //2 вариант
-            setTasks({ ...tasks, [todoListId]: [...tasks[todoListId], newTask] });
+            setTasks({...tasks, [todoListId]: [...tasks[todoListId], newTask]});
         }
     };
 
@@ -90,7 +112,7 @@ function App() {
         //данную задачу можно решить через find и де структуризацию,
         // но чтобы заставить реакт перерендерить мы создадим только новый массив, это так себе решение!!!
         // в данном случае мы создали новый массив и новый объект
-        setTasks({ ...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? { ...t, isDone: isDone } : t)) });
+        setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? {...t, isDone: isDone} : t))});
     };
 
     const getFilteredTasksForRender = (tasks: TasksType[], filterValue: FilterValuesTypes): TasksType[] => {
@@ -121,11 +143,18 @@ function App() {
                 changeTodoListFilter={changeTodoListFilter}
                 changeTaskStatus={changeTaskStatus}
                 filter={tl.filter}
+                changeTaskTitle={changeTaskTitle}
+                changeTodoListTitle={changeTodoListTitle}
             />
         );
     });
 
-    return <div className="App">{todoListComponents}</div>;
+    return (
+        <div className="App">
+            <AddItemForm addItem={addTodoList}/>
+            {todoListComponents}
+        </div>
+    );
 }
 
 export default App;
