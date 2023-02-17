@@ -1,26 +1,19 @@
-.App {
-    padding: 30px;
-    display: flex;
+ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove padding */
+    margin: 0; /* Remove margins */
 }
 
-.App > div {
-    margin-right: 50px;
-}
+/*.App {*/
+/*    padding: 30px;*/
+/*    display: flex;*/
+/*}*/
+
+/*.App > div {*/
+/*    margin-right: 50px;*/
+/*}*/
 
 .done {
-    border: 1px solid #008700;
-    color: #008700;
+    text-decoration: line-through;
 }
 
-.btn-active {
-    background-color: hotpink;
-}
-
-.error-input {
-    border: 5px solid red;
-}
-
-.addItemForm {
-    padding: 10px;
-    border: 5px solid hotpink;
-}

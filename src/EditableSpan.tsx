@@ -1,6 +1,7 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
 import {Simulate} from 'react-dom/test-utils';
 import input = Simulate.input;
+import {TextField} from '@mui/material';
 
 type EditableSpanPropsType = {
     title: string;
@@ -20,14 +21,19 @@ export const EditableSpan: FC<EditableSpanPropsType> = (props) => {
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
-
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLDivElement>) => {
+        e.key === 'Enter' && offEditMode()
+    }
     return editMode
-        ? <input type="text"
-                 value={title}
-                 autoFocus
-                 onBlur={offEditMode}
-                 onChange={onChangeHandler}/>
-        : <span onDoubleClick={onEditMode}>
+        ? <TextField value={title}
+                     onBlur={offEditMode}
+                     onChange={onChangeHandler}
+                     variant="standard"
+                     autoFocus
+                     onKeyDown={onKeyDownHandler}
+        />
+        :
+        <span onDoubleClick={onEditMode}>
             {title}
         </span>;
 };

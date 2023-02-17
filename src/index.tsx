@@ -2,14 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {DevSupport} from "@react-buddy/ide-toolbox";
-import {ComponentPreviews, useInitial} from "./dev";
+import {ThemeProvider, createTheme, Experimental_CssVarsProvider as CssVarsProvider} from '@mui/material/styles';
+import {lightBlue, pink, red} from '@mui/material/colors';
+
+
+const theme = createTheme({
+    palette: {
+        primary: lightBlue,
+        mode: 'dark'
+    },
+});
 
 
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <App />
-);
+    // <ThemeProvider theme={theme}>
+    <CssVarsProvider><App/></CssVarsProvider>
 
+    // </ThemeProvider>
+)
