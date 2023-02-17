@@ -2,24 +2,34 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import {ThemeProvider, createTheme, Experimental_CssVarsProvider as CssVarsProvider} from '@mui/material/styles';
-import {lightBlue, pink, red} from '@mui/material/colors';
+import {
+    Experimental_CssVarsProvider as CssVarsProvider,
+    experimental_extendTheme as extendTheme,
+} from '@mui/material/styles';
+import {blue, grey, lightBlue, pink, purple} from '@mui/material/colors';
 
 
-const theme = createTheme({
-    palette: {
-        primary: lightBlue,
-        mode: 'dark'
+const theme = extendTheme({
+    colorSchemes: {
+        light: {
+            palette: {
+                primary: blue
+            },
+        },
+        dark: {
+            palette: {
+                primary: {
+                    main: pink[400],
+                },
+            },
+        },
     },
 });
-
-
 const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    // <ThemeProvider theme={theme}>
-    <CssVarsProvider><App/></CssVarsProvider>
-
-    // </ThemeProvider>
+    <CssVarsProvider theme={theme}>
+        <App/>
+    </CssVarsProvider>
 )
