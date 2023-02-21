@@ -6,7 +6,7 @@ import {
     Experimental_CssVarsProvider as CssVarsProvider,
     experimental_extendTheme as extendTheme,
 } from '@mui/material/styles';
-import {blue, grey, lightBlue, pink, purple} from '@mui/material/colors';
+import {blue, grey} from '@mui/material/colors';
 
 
 const theme = extendTheme({
@@ -19,7 +19,7 @@ const theme = extendTheme({
         dark: {
             palette: {
                 primary: {
-                    main: pink[400],
+                    main: grey[400],
                 },
             },
         },

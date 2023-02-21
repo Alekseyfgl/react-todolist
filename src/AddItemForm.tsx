@@ -1,6 +1,6 @@
 import React, {ChangeEvent, FC, KeyboardEvent, useState} from 'react';
-import {Button, IconButton, TextField} from '@mui/material';
-import {ControlPoint, DeleteForever} from '@mui/icons-material';
+import {Button, TextField} from '@mui/material';
+import {ControlPoint} from '@mui/icons-material';
 
 type AddItemFormPropsType = {
     addItem: (title: string) => void;
@@ -9,8 +9,6 @@ type AddItemFormPropsType = {
 export const AddItemForm: FC<AddItemFormPropsType> = (props) => {
     const [title, setTitle] = useState<string>('');
     const [error, setError] = useState<boolean>(false);
-    // const errorMessage: false | JSX.Element = error && <p>Title isn't correct</p>;
-    // const inputStyle: string = error ? 'error-input' : '';
 
     const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => e.key === 'Enter' && props.addItem(e.currentTarget.value);
 

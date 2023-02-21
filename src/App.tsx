@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useState} from 'react';
 import './App.css';
 import {v1} from 'uuid';
 import {Todolist} from './Todolist';
@@ -14,7 +14,7 @@ export type TasksType = {
 };
 export type FilterValuesTypes = 'all' | 'active' | 'completed';
 
-type TodoListType = {
+export type TodoListType = {
     id: string;
     title: string;
     filter: FilterValuesTypes;
@@ -61,13 +61,9 @@ function App() {
         ],
     });
 
-    const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
-        // const copyTasks: TasksStateType = {...tasks}
-        // copyTasks[todoListId] = copyTasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))
-        // setTasks(copyTasks);
-        setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))});
-    }
 
+    //side effect - запросы на сервер
+    //не детерменирована - не определно
     const addTodoList = (todoTitle: string) => {
         const newTodoList: TodoListType = {
             id: v1(),
@@ -77,20 +73,24 @@ function App() {
         setTodoLists([...todoLists, newTodoList]);
         setTasks({...tasks, [newTodoList.id]: []});
     };
-
     const removeTodoList = (todoListId: string) => {
         const updatedTodoList: TodoListType[] = todoLists.filter((tl) => tl.id !== todoListId);
         setTodoLists(updatedTodoList);
     };
-
+    const changeTodoListTitle = (title: string, todoListId: string) => {
+        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title} : tl))
+    };
     const changeTodoListFilter = (filter: FilterValuesTypes, todoListId: string) => {
         setTodoLists(todoLists.map((tl: TodoListType) => (tl.id === todoListId ? {...tl, filter: filter} : tl)));
     };
 
-    const changeTodoListTitle = (title: string, todoListId: string) => {
-        setTodoLists(todoLists.map(tl => tl.id === todoListId ? {...tl, title: title} : tl))
-    };
 
+    const changeTaskTitle = (taskId: string, title: string, todoListId: string) => {
+        // const copyTasks: TasksStateType = {...tasks}
+        // copyTasks[todoListId] = copyTasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))
+        // setTasks(copyTasks);
+        setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? {...t, title: title} : t))});
+    }
     const removeTask = (taskId: string, todoListId: string): void => {
         //1 вариант
         /*
@@ -104,7 +104,6 @@ function App() {
         //1 вариант
         setTasks({...tasks, [todoListId]: tasks[todoListId].filter((t: TasksType) => taskId !== t.id)});
     };
-
     const addTask = (title: string, todoListId: string) => {
         if (title.trim() !== '') {
             const newTask: TasksType = {
@@ -124,7 +123,6 @@ function App() {
             setTasks({...tasks, [todoListId]: [...tasks[todoListId], newTask]});
         }
     };
-
     const changeTaskStatus = (taskId: string, isDone: boolean, todoListId: string) => {
         //данную задачу можно решить через find и де структуризацию,
         // но чтобы заставить реакт перерендерить мы создадим только новый массив, это так себе решение!!!
@@ -132,6 +130,8 @@ function App() {
         setTasks({...tasks, [todoListId]: tasks[todoListId].map((t) => (t.id === taskId ? {...t, isDone: isDone} : t))});
     };
 
+
+    //utility
     const getFilteredTasksForRender = (tasks: TasksType[], filterValue: FilterValuesTypes): TasksType[] => {
         let filteredTasks: TasksType[] = tasks;
 
@@ -196,11 +196,20 @@ function App() {
             <Container fixed>
                 <Grid container
                       sx={{p: '20px 0'}}
+                      display={'flex'}
+                      justifyContent={'center'}
                 >
-                    <AddItemForm addItem={addTodoList}/>
+                    <Paper elevation={3}
+                           sx={{p: '20px'}}
+                    >
+                        <AddItemForm addItem={addTodoList}/>
+                    </Paper>
+
                 </Grid>
                 <Grid container
                       spacing={4}
+                      display={'flex'}
+                      justifyContent={'center'}
                 >
                     {todoListComponents}
                 </Grid>
