@@ -20,7 +20,7 @@ export type TodoListType = {
     filter: FilterValuesTypes;
 };
 
-type TasksStateType = {
+export type TasksStateType = {
     [todoListId: string]: TasksType[];
 };
 
@@ -47,6 +47,7 @@ function App() {
         {id: todoListId_2, title: 'SHOP', filter: 'all'},
     ]);
 
+
     const [tasks, setTasks] = useState<TasksStateType>({
         [todoListId_1]: [
             {id: '1', title: 'Hello world', isDone: true},
@@ -60,6 +61,9 @@ function App() {
             {id: '7', title: 'ACE', isDone: false},
         ],
     });
+
+    console.log('todoLists', todoLists)
+    console.log('tasks', tasks)
 
 
     //side effect - запросы на сервер
