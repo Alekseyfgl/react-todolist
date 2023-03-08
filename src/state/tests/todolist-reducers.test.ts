@@ -2,23 +2,29 @@ import {
     addTodoListAC,
     changeTodoListFilterAC,
     changeTodoListTitleAC,
-
     removeTodoListAC,
-
     todolistReducers
-} from './todolist-reducers';
-import {FilterValuesTypes, TodoListType} from '../App';
+} from '../todolist-reducers';
+import {FilterValuesTypes, TodoListType} from '../../App';
 import {v1} from 'uuid';
-import {AddTodoListActionType, ChangeTodoListFilterActionType, ChangeTodoListTitleActionType, RemoveTodoListActionType} from './tasks-reducer';
+import {AddTodoListActionType, ChangeTodoListFilterActionType, ChangeTodoListTitleActionType, RemoveTodoListActionType} from '../tasks-reducer';
 
-test('correct todolist should be removed', () => {
-    //тестовые данные
-    const todolistId1 = v1();
-    const todolistId2 = v1();
-    const startState: TodoListType[] = [
+let todolistId1 = v1();
+let todolistId2 = v1();
+let startState: TodoListType[] = []
+
+
+beforeEach(() => {
+    todolistId1 = v1();
+    todolistId2 = v1();
+    startState = [
         {id: todolistId1, title: 'What to learn', filter: 'all'},
         {id: todolistId2, title: 'What to buy', filter: 'all'}
     ]
+})
+test('correct todolist should be removed', () => {
+    //тестовые данные
+
     //выполнение тестируемого кода
     const action: RemoveTodoListActionType = removeTodoListAC(todolistId1)
     const endState: TodoListType[] = todolistReducers(startState, action)
@@ -29,16 +35,7 @@ test('correct todolist should be removed', () => {
 
 
 test('correct todolist should be added', () => {
-//
-    const todolistId1 = v1();
-    const todolistId2 = v1();
-
     const newTodolistTitle = 'New Todolist';
-
-    const startState: TodoListType[] = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'}
-    ]
 
     const action: AddTodoListActionType = addTodoListAC(newTodolistTitle)
     const endState: TodoListType[] = todolistReducers(startState, action)
@@ -49,15 +46,10 @@ test('correct todolist should be added', () => {
 
 
 test('correct filter of todolist should be changed', () => {
-    const todolistId1 = v1();
-    const todolistId2 = v1();
+
 
     const newFilter: FilterValuesTypes = 'all';
 
-    const startState: TodoListType[] = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'}
-    ]
 
     const action: ChangeTodoListFilterActionType = changeTodoListFilterAC(newFilter, todolistId1)
     const endState: TodoListType[] = todolistReducers(startState, action);
@@ -68,15 +60,8 @@ test('correct filter of todolist should be changed', () => {
 
 
 test('correct todolist should change its name', () => {
-    const todolistId1 = v1();
-    const todolistId2 = v1();
 
     const newTodolistTitle: string = 'New Todolist';
-
-    const startState: Array<TodoListType> = [
-        {id: todolistId1, title: 'What to learn', filter: 'all'},
-        {id: todolistId2, title: 'What to buy', filter: 'all'}
-    ]
 
     const action: ChangeTodoListTitleActionType = changeTodoListTitleAC(todolistId2, newTodolistTitle)
     const endState: TodoListType[] = todolistReducers(startState, action);

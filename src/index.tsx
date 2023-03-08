@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
+
 import {
     Experimental_CssVarsProvider as CssVarsProvider,
     experimental_extendTheme as extendTheme,
 } from '@mui/material/styles';
 import {blue, grey} from '@mui/material/colors';
+import AppWithReducers from './AppWithReducers';
+import AppWithRedux from './AppWithRedux';
+import {Provider} from 'react-redux';
+import {store} from './state/redux/store';
 
 
 const theme = extendTheme({
@@ -30,6 +34,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <CssVarsProvider theme={theme}>
-        <App/>
+        {/*<App/>*/}
+        {/*<AppWithReducers/>*/}
+        <Provider store={store}>
+            <AppWithRedux/>
+        </Provider>
+
     </CssVarsProvider>
 )
